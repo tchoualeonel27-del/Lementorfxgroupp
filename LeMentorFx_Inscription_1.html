@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeMentorFx — Inscription / Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v1:#7C3AED;--v2:#6D28D9;--v3:#5B21B6;
+  --b1:#3B82F6;--b2:#2563EB;--b3:#1D4ED8;
+  --bg:#07050F;--s1:#0F0B1E;--s2:#16122A;--s3:#1E1935;--s4:#261F42;
+  --txt:#F0EDFF;--sub:#A89FCC;--muted:#5E5880;
+  --bdr:rgba(124,58,237,.2);--bdr2:rgba(124,58,237,.4);
+  --glow:rgba(124,58,237,.3);--glow2:rgba(59,130,246,.25);
+  --ok:#34D399;--err:#F87171;--warn:#FCD34D;
+  --r:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Outfit',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
+
+/* BG */
+.bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18}
+.orb1{width:500px;height:500px;background:var(--v1);top:-150px;left:-100px;animation:drift1 14s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:var(--b1);bottom:-120px;right:-80px;animation:drift2 18s ease-in-out infinite}
+.orb3{width:300px;height:300px;background:#4F46E5;top:40%;left:40%;animation:drift3 20s ease-in-out infinite;opacity:.1}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);background-size:60px 60px}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-40px)}}
+@keyframes drift3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.3)}}
+
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 18px 80px}
+
+/* LANG */
+.lang-bar{display:flex;justify-content:flex-end;gap:8px;padding:18px 0 0}
+.lb{font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;padding:6px 16px;border-radius:100px;border:1px solid var(--bdr);background:transparent;color:var(--muted);cursor:pointer;transition:.2s}
+.lb.on{background:var(--v1);border-color:var(--v1);color:#fff;box-shadow:0 0 14px var(--glow)}
+.lb:hover:not(.on){border-color:var(--bdr2);color:var(--sub)}
+
+/* HEADER */
+header{text-align:center;padding:40px 0 36px;border-bottom:1px solid var(--bdr);margin-bottom:36px;animation:up .7s ease both}
+.badge{display:inline-flex;align-items:center;gap:9px;background:rgba(124,58,237,.12);border:1px solid var(--bdr);border-radius:100px;padding:6px 18px 6px 10px;margin-bottom:22px}
+.dot{width:8px;height:8px;background:var(--v1);border-radius:50%;animation:blink 2s infinite;box-shadow:0 0 8px var(--glow)}
+.badge span{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#A78BFA}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(34px,8vw,56px);line-height:1.08;margin-bottom:12px}
+h1 span.g{background:linear-gradient(135deg,#fff 20%,#C4B5FD 55%,#93C5FD 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h1 em{font-style:italic;font-family:'DM Serif Display',serif}
+.sub-txt{font-size:14px;color:var(--sub);line-height:1.7;max-width:450px;margin:0 auto 20px}
+.hpills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:18px}
+.hpills a{font-size:12px;font-weight:500;color:#93C5FD;text-decoration:none;border:1px solid rgba(147,197,253,.22);border-radius:100px;padding:5px 14px;transition:.2s}
+.hpills a:hover{background:rgba(147,197,253,.1);border-color:#93C5FD}
+
+/* STEPS */
+.steps{display:flex;align-items:center;margin-bottom:22px}
+.si{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.sc{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--bdr);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--muted);transition:.35s}
+.si.on .sc{background:linear-gradient(135deg,var(--v1),var(--b1));border-color:transparent;color:#fff;box-shadow:0 0 22px var(--glow)}
+.si.done .sc{background:var(--s3);border-color:#7C3AED;color:#A78BFA}
+.sl{font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;text-align:center}
+.si.on .sl{color:#A78BFA}
+.sdiv{flex:1;height:1px;background:var(--bdr);max-width:50px;margin-bottom:18px}
+.prog-track{height:3px;background:rgba(255,255,255,.05);border-radius:3px;margin-bottom:30px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--v1),var(--b1),#93C5FD);border-radius:3px;transition:width .55s cubic-bezier(.4,0,.2,1)}
+
+/* SECTION */
+.sec{display:none}.sec.on{display:block;animation:up .38s ease both}
+.sh{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.sico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(59,130,246,.2));border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.stit h2{font-size:20px;font-weight:600;color:#fff;margin-bottom:3px}
+.stit p{font-size:12px;color:var(--muted)}
+
+/* FIELDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g1{grid-template-columns:1fr}
+@media(max-width:460px){.g2{grid-template-columns:1fr}}
+.f{display:flex;flex-direction:column;gap:7px}.f.s2{grid-column:1/-1}
+.lbl{font-size:11px;font-weight:600;color:var(--sub);letter-spacing:.08em;text-transform:uppercase}
+.lbl .r{color:#A78BFA}
+input,select,textarea{width:100%;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;color:var(--txt);outline:none;transition:.2s;-webkit-appearance:none}
+input::placeholder,textarea::placeholder{color:var(--muted);font-size:12px}
+input:focus,select:focus,textarea:focus{border-color:#7C3AED;background:var(--s3);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%235E5880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;cursor:pointer}
+select option{background:var(--s2)}
+textarea{resize:vertical;min-height:82px;line-height:1.55}
+.hint{font-size:11px;color:var(--muted);margin-top:-3px}
+.emsg{font-size:11px;color:var(--err);display:none}
+.f.bad .emsg{display:block}.f.bad input,.f.bad select,.f.bad textarea{border-color:var(--err)}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills label{font-size:13px;font-weight:400;color:var(--txt);display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--bdr);border-radius:100px;padding:7px 15px;cursor:pointer;transition:.2s;text-transform:none;letter-spacing:0}
+.pills input[type=radio],.pills input[type=checkbox]{width:14px;height:14px;accent-color:#7C3AED;flex-shrink:0}
+.pills label:has(input:checked){border-color:#7C3AED;background:rgba(124,58,237,.18);color:#fff}
+
+/* BOXES */
+.ibox{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.28);border-radius:var(--r);padding:14px 16px;margin-bottom:18px;font-size:13px;color:var(--sub);line-height:1.65;display:flex;gap:10px;align-items:flex-start}
+.ibox .ic{font-size:16px;flex-shrink:0;margin-top:2px}
+.wbox{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.28);border-radius:var(--r);padding:14px 16px;margin-bottom:18px;font-size:13px;color:#FCA5A5;line-height:1.65;display:flex;gap:10px;align-items:flex-start}
+.exno-cta{background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(59,130,246,.12));border:1px solid var(--bdr2);border-radius:var(--r);padding:20px;text-align:center;margin:12px 0}
+.exno-cta p{font-size:13px;color:var(--sub);line-height:1.6;margin-bottom:14px}
+.exno-cta a{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--v1),var(--b1));color:#fff;font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border-radius:var(--r);padding:12px 26px;box-shadow:0 4px 20px var(--glow);transition:.25s}
+.exno-cta a:hover{box-shadow:0 6px 28px var(--glow);transform:translateY(-1px)}
+
+/* HOW TO FIND ID */
+.howto{background:var(--s3);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;margin:14px 0}
+.howto h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.hstep{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--sub);line-height:1.5}
+.hstep:last-child{border:none}
+.hn{width:22px;height:22px;background:linear-gradient(135deg,var(--v1),var(--b1));border-radius:50%;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* RULES */
+.rules{display:grid;gap:8px;margin:12px 0}
+.rule{display:flex;align-items:flex-start;gap:10px;background:var(--s2);border:1px solid var(--bdr);border-radius:6px;padding:11px 14px;font-size:13px;color:var(--sub);line-height:1.5}
+.rn{font-size:11px;font-weight:700;color:#A78BFA;flex-shrink:0;margin-top:1px;min-width:16px}
+
+/* RECAP */
+.recap{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;margin-bottom:20px}
+.recap h3{font-size:14px;font-weight:600;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.rrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.rrow:last-child{border:none}
+.rl{color:var(--muted)}.rv{color:var(--txt);font-weight:500;text-align:right;max-width:56%}
+
+/* DIVIDER */
+.div{height:1px;background:var(--bdr);margin:18px 0}
+
+/* NAV */
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.05)}
+.btn{font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border:none;cursor:pointer;border-radius:var(--r);padding:13px 24px;transition:.25s;display:inline-flex;align-items:center;gap:8px}
+.bp{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.1)}
+.bp:hover{border-color:var(--bdr2);color:var(--txt)}
+.bn{background:linear-gradient(135deg,var(--v1),var(--b1));color:#fff;box-shadow:0 4px 18px var(--glow)}
+.bn:hover{box-shadow:0 6px 26px var(--glow);transform:translateY(-1px)}
+.bs{background:linear-gradient(135deg,var(--v1),var(--b1));color:#fff;font-size:13px;padding:14px 32px;box-shadow:0 4px 22px var(--glow);flex:1;max-width:300px;justify-content:center}
+.bs:hover{box-shadow:0 8px 32px var(--glow);transform:translateY(-2px)}
+.bs:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(7,5,15,.88);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+#ov.show{display:flex}
+.spin{width:44px;height:44px;border:3px solid rgba(124,58,237,.2);border-top-color:#7C3AED;border-radius:50%;animation:rot .8s linear infinite}
+#ov p{font-size:14px;color:var(--sub);letter-spacing:.05em}
+
+/* SUCCESS */
+#win{display:none;text-align:center;padding:60px 20px;animation:up .6s ease both}
+.wico{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(52,211,153,.15));border:1.5px solid rgba(52,211,153,.35);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 24px;box-shadow:0 0 40px rgba(52,211,153,.12)}
+#win h2{font-family:'DM Serif Display',serif;font-size:36px;background:linear-gradient(135deg,#fff,#93C5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+#win .ws{font-size:14px;color:var(--sub);line-height:1.7;max-width:420px;margin:0 auto 28px}
+.nxt{display:grid;gap:10px;max-width:400px;margin:0 auto 32px;text-align:left}
+.ni{display:flex;align-items:flex-start;gap:12px;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:13px 16px}
+.nn{width:24px;height:24px;background:linear-gradient(135deg,var(--v1),var(--b1));border-radius:50%;font-size:11px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ni p{font-size:13px;color:var(--sub);margin:0;line-height:1.5}
+.ni strong{color:var(--txt)}
+.ctao{display:flex;flex-direction:column;align-items:center;gap:12px}
+.ca{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--v1),var(--b1));color:#fff;font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border-radius:var(--r);padding:14px 30px;box-shadow:0 4px 20px var(--glow);transition:.25s}
+.ca:hover{box-shadow:0 6px 30px var(--glow);transform:translateY(-2px)}
+.cs{font-size:13px;color:#93C5FD;text-decoration:none;border:1px solid rgba(147,197,253,.22);border-radius:100px;padding:9px 20px;transition:.2s}
+.cs:hover{background:rgba(147,197,253,.08);border-color:#93C5FD}
+
+/* FOOTER */
+footer{border-top:1px solid var(--bdr);padding:24px 0;margin-top:40px;text-align:center}
+footer p{font-size:12px;color:var(--muted);line-height:1.8}
+footer a{color:#A78BFA;text-decoration:none}
+footer a:hover{color:#C4B5FD}
+
+/* ANIM */
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes rot{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="bg-fx">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="grid-lines"></div>
+</div>
+
+<div id="ov">
+  <div class="spin"></div>
+  <p id="ov-msg">Envoi en cours…</p>
+</div>
+
+<div class="wrap">
+
+  <div class="lang-bar">
+    <button class="lb on" onclick="setL('fr')" id="lbfr">🇫🇷 FR</button>
+    <button class="lb" onclick="setL('en')" id="lben">🇬🇧 EN</button>
+  </div>
+
+  <header>
+    <div class="badge">
+      <span class="dot"></span>
+      <span class="t" data-fr="IB Exness · Signaux XAU/USD · Mondial" data-en="Exness IB Partner · XAU/USD Signals · Worldwide">IB Exness · Signaux XAU/USD · Mondial</span>
+    </div>
+    <h1>
+      <span class="g t" data-fr="Rejoindre" data-en="Join">Rejoindre</span><br>
+      <em>LeMentorFx</em>
+    </h1>
+    <p class="sub-txt t"
+      data-fr="Signaux Forex gratuits, éducation trading & accompagnement. Ouvert à tous, partout dans le monde 🌍"
+      data-en="Free Forex signals, trading education & coaching. Open to everyone, worldwide 🌍">
+      Signaux Forex gratuits, éducation trading & accompagnement. Ouvert à tous, partout dans le monde 🌍
+    </p>
+    <div class="hpills">
+      <a href="https://t.me/lementorforexgroup" target="_blank">📢 <span class="t" data-fr="Canal Telegram" data-en="Telegram Channel">Canal Telegram</span></a>
+      <a href="https://t.me/lementorfx" target="_blank">💬 @lementorfx</a>
+      <a href="https://one.exnessonelink.com/a/do7n4lz3on" target="_blank">🏦 Exness</a>
+    </div>
+  </header>
+
+  <div id="form-wrap">
+    <div class="steps">
+      <div class="si on" id="si1"><div class="sc">1</div><div class="sl t" data-fr="Identité" data-en="Identity">Identité</div></div>
+      <div class="sdiv"></div>
+      <div class="si" id="si2"><div class="sc">2</div><div class="sl t" data-fr="Trading" data-en="Trading">Trading</div></div>
+      <div class="sdiv"></div>
+      <div class="si" id="si3"><div class="sc">3</div><div class="sl">Exness</div></div>
+      <div class="sdiv"></div>
+      <div class="si" id="si4"><div class="sc">4</div><div class="sl t" data-fr="Validation" data-en="Confirm">Validation</div></div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog" style="width:25%"></div></div>
+
+    <form novalidate>
+
+      <!-- ════ S1 ════ -->
+      <div class="sec on" id="s1">
+        <div class="sh"><div class="sico">👤</div><div class="stit">
+          <h2 class="t" data-fr="Identification" data-en="Personal Info">Identification</h2>
+          <p class="t" data-fr="Tes informations de contact" data-en="Your contact details">Tes informations de contact</p>
+        </div></div>
+
+        <div class="g2">
+          <div class="f" id="fn"><label class="lbl">
+            <span class="t" data-fr="Nom complet" data-en="Full Name">Nom complet</span> <span class="r">*</span></label>
+            <input type="text" id="nom" placeholder="Jean Mvogo / John Smith" autocomplete="name">
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+          <div class="f" id="ftg"><label class="lbl">Telegram <span class="r">*</span></label>
+            <input type="text" id="tg" placeholder="@yourpseudo">
+            <span class="hint t" data-fr="Commence par @" data-en="Must start with @">Commence par @</span>
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="f" id="fpays"><label class="lbl"><span class="t" data-fr="Pays" data-en="Country">Pays</span> <span class="r">*</span></label>
+            <select id="pays">
+              <option value="">—</option>
+              <optgroup label="🌍 Afrique">
+                <option>Cameroun</option><option>Côte d'Ivoire</option><option>Sénégal</option><option>Guinée</option><option>Congo RDC</option><option>Congo Brazzaville</option><option>Gabon</option><option>Bénin</option><option>Togo</option><option>Mali</option><option>Burkina Faso</option><option>Niger</option><option>Tchad</option><option>Madagascar</option><option>Maroc</option><option>Algérie</option><option>Tunisie</option><option>Nigeria</option><option>Ghana</option><option>Kenya</option><option>Afrique du Sud</option><option>Autre Afrique</option>
+              </optgroup>
+              <optgroup label="🌍 Europe"><option>France</option><option>Belgique</option><option>Suisse</option><option>UK</option><option>Autre Europe</option></optgroup>
+              <optgroup label="🌎 Amériques"><option>Canada</option><option>USA</option><option>Autre Amériques</option></optgroup>
+              <optgroup label="🌏 Autre"><option>Autre</option></optgroup>
+            </select>
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+          <div class="f"><label class="lbl"><span class="t" data-fr="Ville" data-en="City">Ville</span></label>
+            <input type="text" id="ville" placeholder="Yaoundé / London…">
+          </div>
+        </div>
+
+        <div class="g2">
+          <div class="f"><label class="lbl"><span class="t" data-fr="WhatsApp / Tél." data-en="WhatsApp / Phone">WhatsApp / Tél.</span></label>
+            <input type="tel" id="tel" placeholder="+237 6XX XXX XXX">
+          </div>
+          <div class="f"><label class="lbl">Email</label>
+            <input type="email" id="email" placeholder="you@email.com" autocomplete="email">
+          </div>
+        </div>
+
+        <div class="g2 g1">
+          <div class="f" id="fsrc"><label class="lbl"><span class="t" data-fr="Comment tu nous as connus ?" data-en="How did you find us?">Comment tu nous as connus ?</span> <span class="r">*</span></label>
+            <select id="src">
+              <option value="">—</option>
+              <option class="t" data-fr="Telegram" data-en="Telegram">Telegram</option>
+              <option class="t" data-fr="Ami / Recommandation" data-en="Friend / Referral">Ami / Recommandation</option>
+              <option>YouTube</option><option>TikTok</option>
+              <option>Facebook / Instagram</option><option>Google</option>
+              <option class="t" data-fr="Autre" data-en="Other">Autre</option>
+            </select>
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+        </div>
+
+        <div class="g2 g1">
+          <div class="f" id="flng"><label class="lbl"><span class="t" data-fr="Langue préférée" data-en="Preferred language">Langue préférée</span> <span class="r">*</span></label>
+            <div class="pills">
+              <label><input type="radio" name="lng" value="Français"> 🇫🇷 Français</label>
+              <label><input type="radio" name="lng" value="English"> 🇬🇧 English</label>
+              <label><input type="radio" name="lng" value="Both"> 🔀 <span class="t" data-fr="Les deux" data-en="Both">Les deux</span></label>
+            </div>
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+        </div>
+
+        <div class="nav"><span></span>
+          <button type="button" class="btn bn" onclick="nx(1)"><span class="t" data-fr="Continuer" data-en="Continue">Continuer</span> →</button>
+        </div>
+      </div>
+
+      <!-- ════ S2 ════ -->
+      <div class="sec" id="s2">
+        <div class="sh"><div class="sico">📊</div><div class="stit">
+          <h2 class="t" data-fr="Expérience Trading" data-en="Trading Experience">Expérience Trading</h2>
+          <p class="t" data-fr="Pour adapter le contenu à ton niveau" data-en="To tailor content to your level">Pour adapter le contenu à ton niveau</p>
+        </div></div>
+
+        <div class="g2 g1">
+          <div class="f" id="fniv"><label class="lbl"><span class="t" data-fr="Ton niveau" data-en="Your level">Ton niveau</span> <span class="r">*</span></label>
+            <div class="pills">
+              <label><input type="radio" name="niv" value="Débutant/Beginner"> 🌱 <span class="t" data-fr="Débutant" data-en="Beginner">Débutant</span></label>
+              <label><input type="radio" name="niv" value="Intermédiaire/Intermediate"> 📈 <span class="t" data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</span></label>
+              <label><input type="radio" name="niv" value="Avancé/Advanced"> 🔥 <span class="t" data-fr="Avancé" data-en="Advanced">Avancé</span></label>
+              <label><input type="radio" name="niv" value="Expert"> 💎 Expert</label>
+            </div>
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="g2">
+          <div class="f"><label class="lbl"><span class="t" data-fr="Années d'expérience" data-en="Years of experience">Années d'expérience</span></label>
+            <select id="exp">
+              <option value="">—</option>
+              <option class="t" data-fr="Moins de 6 mois" data-en="< 6 months">Moins de 6 mois</option>
+              <option class="t" data-fr="6 mois – 1 an" data-en="6 months – 1 year">6 mois – 1 an</option>
+              <option class="t" data-fr="1 – 2 ans" data-en="1 – 2 years">1 – 2 ans</option>
+              <option class="t" data-fr="2 – 5 ans" data-en="2 – 5 years">2 – 5 ans</option>
+              <option class="t" data-fr="+ de 5 ans" data-en="5+ years">+ de 5 ans</option>
+            </select>
+          </div>
+          <div class="f"><label class="lbl"><span class="t" data-fr="Capital estimé" data-en="Estimated capital">Capital estimé</span></label>
+            <select id="cap">
+              <option value="">—</option>
+              <option class="t" data-fr="Pas encore" data-en="None yet">Pas encore</option>
+              <option>&lt; 100 USD</option><option>100 – 500 USD</option>
+              <option>500 – 2 000 USD</option><option>&gt; 2 000 USD</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="g2 g1">
+          <div class="f"><label class="lbl"><span class="t" data-fr="Plateformes utilisées" data-en="Platforms used">Plateformes</span></label>
+            <div class="pills">
+              <label><input type="checkbox" name="plat" value="MT4"> MT4</label>
+              <label><input type="checkbox" name="plat" value="MT5"> MT5</label>
+              <label><input type="checkbox" name="plat" value="cTrader"> cTrader</label>
+              <label><input type="checkbox" name="plat" value="TradingView"> TradingView</label>
+              <label><input type="checkbox" name="plat" value="Aucune"> <span class="t" data-fr="Aucune" data-en="None">Aucune</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="g2 g1">
+          <div class="f"><label class="lbl"><span class="t" data-fr="Notions connues" data-en="Concepts known">Notions connues</span></label>
+            <div class="pills">
+              <label><input type="checkbox" name="not" value="S/R"> S/R</label>
+              <label><input type="checkbox" name="not" value="SMC"> SMC</label>
+              <label><input type="checkbox" name="not" value="ICT/OB"> ICT / OB</label>
+              <label><input type="checkbox" name="not" value="Liquidité/FVG"> FVG / Liquidité</label>
+              <label><input type="checkbox" name="not" value="Aucune"> <span class="t" data-fr="Aucune" data-en="None">Aucune</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="f"><label class="lbl"><span class="t" data-fr="Tes objectifs" data-en="Your goals">Tes objectifs</span></label>
+          <textarea id="obj" placeholder="Revenus complémentaires, liberté financière… / Side income, financial freedom…"></textarea>
+        </div>
+
+        <div class="nav">
+          <button type="button" class="btn bp" onclick="pv(2)">← <span class="t" data-fr="Retour" data-en="Back">Retour</span></button>
+          <button type="button" class="btn bn" onclick="nx(2)"><span class="t" data-fr="Continuer" data-en="Continue">Continuer</span> →</button>
+        </div>
+      </div>
+
+      <!-- ════ S3 ════ -->
+      <div class="sec" id="s3">
+        <div class="sh"><div class="sico">🏦</div><div class="stit">
+          <h2 class="t" data-fr="Compte Exness" data-en="Exness Account">Compte Exness</h2>
+          <p class="t" data-fr="Obligatoire pour accéder au canal privé" data-en="Required to access the private channel">Obligatoire pour accéder au canal privé</p>
+        </div></div>
+
+        <div class="ibox"><span class="ic">🔒</span>
+          <span class="t"
+            data-fr="Le canal est <strong>100% gratuit</strong>. La seule condition : s'inscrire via notre lien Exness. Ton ID Exness sera <strong>vérifié manuellement</strong> avant l'accès."
+            data-en="The channel is <strong>100% free</strong>. The only condition: register via our Exness link. Your Exness ID will be <strong>manually verified</strong> before access.">
+            Le canal est <strong>100% gratuit</strong>. La seule condition : s'inscrire via notre lien Exness. Ton ID Exness sera <strong>vérifié manuellement</strong> avant l'accès.
+          </span>
+        </div>
+
+        <div class="g2 g1">
+          <div class="f" id="fexq"><label class="lbl"><span class="t" data-fr="As-tu un compte Exness ?" data-en="Do you have an Exness account?">As-tu un compte Exness ?</span> <span class="r">*</span></label>
+            <div class="pills">
+              <label><input type="radio" name="exq" value="Oui" onchange="togEx()"> ✅ <span class="t" data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label><input type="radio" name="exq" value="Non" onchange="togEx()"> ❌ <span class="t" data-fr="Pas encore" data-en="Not yet">Pas encore</span></label>
+              <label><input type="radio" name="exq" value="En cours" onchange="togEx()"> 🔄 <span class="t" data-fr="En cours" data-en="In progress">En cours</span></label>
+            </div>
+            <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+          </div>
+        </div>
+
+        <!-- YES block -->
+        <div id="ex-yes" style="display:none">
+          <div class="g2">
+            <div class="f" id="fexid"><label class="lbl"><span class="t" data-fr="Ton ID Exness" data-en="Your Exness ID">Ton ID Exness</span> <span class="r">*</span></label>
+              <input type="text" id="exid" placeholder="Ex: 12345678" inputmode="numeric">
+              <span class="hint t" data-fr="Numéro 7-9 chiffres dans ton espace Exness" data-en="7-9 digit number in your Exness dashboard">Numéro 7-9 chiffres dans ton espace Exness</span>
+              <span class="emsg t" data-fr="ID obligatoire" data-en="ID required">ID obligatoire</span>
+            </div>
+            <div class="f"><label class="lbl"><span class="t" data-fr="Type de compte" data-en="Account type">Type de compte</span></label>
+              <select id="extype">
+                <option value="">—</option>
+                <option>Standard</option><option>Standard Cent</option><option>Pro</option><option>Raw Spread</option><option>Zero</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="g2 g1">
+            <div class="f" id="fib"><label class="lbl"><span class="t" data-fr="Compte créé via le lien LeMentorFx ?" data-en="Account created via LeMentorFx link?">Compte créé via le lien LeMentorFx ?</span> <span class="r">*</span></label>
+              <div class="pills">
+                <label><input type="radio" name="ib" value="Oui"> ✅ <span class="t" data-fr="Oui" data-en="Yes">Oui</span></label>
+                <label><input type="radio" name="ib" value="Non"> ❌ <span class="t" data-fr="Non" data-en="No">Non</span></label>
+                <label><input type="radio" name="ib" value="Je ne sais pas"> ❓ <span class="t" data-fr="Je ne sais pas" data-en="Not sure">Je ne sais pas</span></label>
+              </div>
+              <span class="hint t" data-fr="Si non → contacte @lementorfx avant de soumettre." data-en="If no → contact @lementorfx before submitting.">Si non → contacte @lementorfx avant de soumettre.</span>
+              <span class="emsg t" data-fr="Obligatoire" data-en="Required">Obligatoire</span>
+            </div>
+          </div>
+
+          <div class="g2 g1">
+            <div class="f"><label class="lbl"><span class="t" data-fr="Dépôt effectué ?" data-en="Deposit made?">Dépôt effectué ?</span></label>
+              <div class="pills">
+                <label><input type="radio" name="dep" value="Oui"> ✅ <span class="t" data-fr="Oui" data-en="Yes">Oui</span></label>
+                <label><input type="radio" name="dep" value="Non"> <span class="t" data-fr="Pas encore" data-en="Not yet">Pas encore</span></label>
+                <label><input type="radio" name="dep" value="Démo"> <span class="t" data-fr="Compte démo" data-en="Demo">Démo</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="howto">
+            <h4>🔍 <span class="t" data-fr="Comment trouver ton ID Exness ?" data-en="How to find your Exness ID?">Comment trouver ton ID Exness ?</span></h4>
+            <div class="hstep"><div class="hn">1</div><span class="t" data-fr="Va sur <strong>exness.com</strong> et connecte-toi" data-en="Go to <strong>exness.com</strong> and log in">Va sur <strong>exness.com</strong> et connecte-toi</span></div>
+            <div class="hstep"><div class="hn">2</div><span class="t" data-fr="Clique sur ton <strong>Profil</strong> (haut à droite)" data-en="Click your <strong>Profile</strong> (top right)">Clique sur ton <strong>Profil</strong> (haut à droite)</span></div>
+            <div class="hstep"><div class="hn">3</div><span class="t" data-fr="Ton <strong>ID de compte</strong> est affiché sur le tableau de bord — 7 à 9 chiffres." data-en="Your <strong>account ID</strong> appears on the dashboard — 7 to 9 digits.">Ton <strong>ID de compte</strong> : numéro à 7–9 chiffres visible sur le tableau de bord.</span></div>
+          </div>
+        </div>
+
+        <!-- NO block -->
+        <div id="ex-no" style="display:none">
+          <div class="wbox"><span class="ic">⚠️</span>
+            <span class="t"
+              data-fr="Sans compte Exness créé via notre lien, l'accès au canal privé ne peut pas être accordé. L'inscription est gratuite et sans engagement."
+              data-en="Without an Exness account created via our link, access to the private channel cannot be granted. Registration is free with no commitment.">
+              Sans compte Exness créé via notre lien, l'accès au canal privé ne peut pas être accordé.
+            </span>
+          </div>
+          <div class="exno-cta">
+            <p class="t"
+              data-fr="Crée ton compte Exness gratuitement via notre lien, puis reviens ici pour finaliser ton inscription."
+              data-en="Create your Exness account for free via our link, then come back here to finalize your registration.">
+              Crée ton compte Exness gratuitement, puis reviens ici.
+            </p>
+            <a href="https://one.exnessonelink.com/a/do7n4lz3on" target="_blank">🏦 <span class="t" data-fr="Créer mon compte Exness" data-en="Create my Exness Account">Créer mon compte Exness</span></a>
+          </div>
+          <div class="f"><label class="lbl"><span class="t" data-fr="Besoin d'aide ?" data-en="Need help?">Besoin d'aide ?</span></label>
+            <div class="pills">
+              <label><input type="radio" name="aide" value="Oui"> 🙋 <span class="t" data-fr="Oui" data-en="Yes">Oui</span></label>
+              <label><input type="radio" name="aide" value="Non"> <span class="t" data-fr="Non, je me débrouille" data-en="No, I'm fine">Non</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="g2 g1">
+          <div class="f"><label class="lbl"><span class="t" data-fr="Sessions disponibles" data-en="Available sessions">Sessions disponibles</span></label>
+            <div class="pills">
+              <label><input type="checkbox" name="ses" value="Asia/Asie"> 🌏 <span class="t" data-fr="Asie 02-08h GMT" data-en="Asia 02-08 GMT">Asie</span></label>
+              <label><input type="checkbox" name="ses" value="London/Londres"> 🇬🇧 <span class="t" data-fr="Londres 08-12h GMT" data-en="London 08-12 GMT">Londres</span></label>
+              <label><input type="checkbox" name="ses" value="New York"> 🇺🇸 NY 13-17h GMT</label>
+              <label><input type="checkbox" name="ses" value="Flexible"> 🕐 <span class="t" data-fr="Flexible" data-en="Flexible">Flexible</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="f"><label class="lbl"><span class="t" data-fr="Questions ou attentes" data-en="Questions or expectations">Questions / attentes</span></label>
+          <textarea id="ques" placeholder="…"></textarea>
+        </div>
+
+        <div class="nav">
+          <button type="button" class="btn bp" onclick="pv(3)">← <span class="t" data-fr="Retour" data-en="Back">Retour</span></button>
+          <button type="button" class="btn bn" onclick="nx(3)"><span class="t" data-fr="Continuer" data-en="Continue">Continuer</span> →</button>
+        </div>
+      </div>
+
+      <!-- ════ S4 ════ -->
+      <div class="sec" id="s4">
+        <div class="sh"><div class="sico">✅</div><div class="stit">
+          <h2 class="t" data-fr="Confirmation" data-en="Confirmation">Confirmation</h2>
+          <p class="t" data-fr="Vérifie et accepte les règles" data-en="Review and accept the rules">Vérifie et accepte les règles</p>
+        </div></div>
+
+        <div class="recap"><h3>📋 <span class="t" data-fr="Récapitulatif" data-en="Summary">Récapitulatif</span></h3><div id="rrows"></div></div>
+
+        <div class="ibox" style="flex-direction:column;gap:12px;padding:18px;margin-bottom:16px">
+          <p style="font-weight:600;color:#fff;font-size:14px">📜 <span class="t" data-fr="Règles du canal" data-en="Channel Rules">Règles du canal</span></p>
+          <div class="rules">
+            <div class="rule"><span class="rn">1.</span><span class="t" data-fr="Signaux <strong>gratuits</strong> — seule condition : compte Exness via notre lien IB." data-en="<strong>Free</strong> signals — only condition: Exness account via our IB link.">Signaux <strong>gratuits</strong> — seule condition : compte Exness via notre lien IB.</span></div>
+            <div class="rule"><span class="rn">2.</span><span class="t" data-fr="Toujours un <strong>Stop Loss</strong>. Max 1% risque par trade." data-en="Always use a <strong>Stop Loss</strong>. Max 1% risk per trade.">Toujours un <strong>Stop Loss</strong>. Max 1% risque par trade.</span></div>
+            <div class="rule"><span class="rn">3.</span><span class="t" data-fr="Signaux <strong>XAU/USD</strong> uniquement. Sessions London & New York." data-en="<strong>XAU/USD</strong> signals only. London & New York sessions.">Signaux <strong>XAU/USD</strong> uniquement. Sessions London & New York.</span></div>
+            <div class="rule"><span class="rn">4.</span><span class="t" data-fr="Respect mutuel. Zéro spam, zéro arnaque." data-en="Mutual respect. Zero spam, zero scams.">Respect mutuel. Zéro spam, zéro arnaque.</span></div>
+            <div class="rule"><span class="rn">5.</span><span class="t" data-fr="Le trading comporte des risques. Les signaux sont éducatifs, pas des conseils financiers." data-en="Trading involves risk. Signals are educational, not financial advice.">Le trading comporte des risques. Signaux éducatifs, pas de conseils financiers.</span></div>
+          </div>
+        </div>
+
+        <div class="f" id="facc">
+          <div class="pills"><label style="border-radius:var(--r);padding:13px 16px;width:100%">
+            <input type="checkbox" id="acc">
+            <span class="t"
+              data-fr="J'ai lu et j'accepte les règles du canal LeMentorFx *"
+              data-en="I have read and accept the LeMentorFx channel rules *">
+              J'ai lu et j'accepte les règles du canal LeMentorFx <span class="r">*</span>
+            </span>
+          </label></div>
+          <span class="emsg t" data-fr="Acceptation requise" data-en="Required">Acceptation requise</span>
+        </div>
+
+        <div class="f" style="margin-top:8px">
+          <div class="pills"><label style="border-radius:var(--r);padding:13px 16px;width:100%">
+            <input type="checkbox" id="age">
+            <span class="t"
+              data-fr="Je confirme avoir 18 ans ou plus et être responsable de mes décisions de trading."
+              data-en="I confirm I am 18+ years old and responsible for my trading decisions.">
+              Je confirme avoir 18 ans ou plus et être responsable de mes décisions de trading.
+            </span>
+          </label></div>
+        </div>
+
+        <div class="nav">
+          <button type="button" class="btn bp" onclick="pv(4)">← <span class="t" data-fr="Retour" data-en="Back">Retour</span></button>
+          <button type="button" class="btn bs" id="sbtn" onclick="doSubmit()">🚀 &nbsp;<span class="t" data-fr="Valider mon inscription" data-en="Submit registration">Valider mon inscription</span></button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="win">
+    <div class="wico">✅</div>
+    <h2 class="t" data-fr="Inscription validée !" data-en="Registration submitted!">Inscription validée !</h2>
+    <p class="ws t"
+      data-fr="@lementorfx va vérifier ton ID Exness et t'envoyer ton lien d'accès au canal privé dans les 24h. En attendant, rejoins le canal public."
+      data-en="@lementorfx will verify your Exness ID and send your private channel access link within 24 hours. In the meantime, join the public channel.">
+      @lementorfx va vérifier ton ID Exness et t'envoyer ton lien d'accès dans les 24h.
+    </p>
+    <div class="nxt">
+      <div class="ni"><div class="nn">1</div><p><strong class="t" data-fr="Rejoins le canal public" data-en="Join the public channel">Rejoins le canal public</strong><br><span class="t" data-fr="Abonne-toi en attendant la validation." data-en="Subscribe while waiting for validation.">Abonne-toi en attendant la validation.</span></p></div>
+      <div class="ni"><div class="nn">2</div><p><strong class="t" data-fr="DM @lementorfx" data-en="DM @lementorfx">DM @lementorfx</strong><br><span class="t" data-fr='Envoie ton pseudo + "Inscription soumise" pour accélérer.' data-en='Send your handle + "Registration submitted" to speed up.'>Envoie ton pseudo + "Inscription soumise".</span></p></div>
+      <div class="ni"><div class="nn">3</div><p><strong class="t" data-fr="Reçois ton lien privé" data-en="Receive private link">Reçois ton lien privé</strong><br><span class="t" data-fr="Après vérification Exness, lien d'invitation unique." data-en="After Exness verification, unique invitation link.">Après vérification, lien d'invitation unique.</span></p></div>
+    </div>
+    <div class="ctao">
+      <a class="ca" href="https://t.me/lementorforexgroup" target="_blank">📢 <span class="t" data-fr="Canal Public Telegram" data-en="Public Telegram Channel">Canal Public Telegram</span></a>
+      <a class="cs" href="https://t.me/lementorfx" target="_blank">💬 @lementorfx</a>
+      <a class="cs" href="https://one.exnessonelink.com/a/do7n4lz3on" target="_blank">🏦 Exness</a>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong style="color:#A78BFA">LeMentorFx</strong> · IB Exness · XAU/USD Signals · Worldwide 🌍<br>
+    <a href="https://t.me/lementorfx">@lementorfx</a> · <a href="https://t.me/salomonryn">@salomonryn</a> · <a href="https://t.me/lementorforexgroup">Canal</a> · <a href="https://one.exnessonelink.com/a/do7n4lz3on">Exness IB</a></p>
+    <p style="margin-top:8px;font-size:11px"><span class="t" data-fr="Service gratuit. Le Forex comporte des risques. Tradez responsablement." data-en="Free service. Forex involves risk. Trade responsibly.">Service gratuit. Le Forex comporte des risques. Tradez responsablement.</span></p>
+  </footer>
+
+</div>
+
+<script>
+let L='fr', step=1;
+
+function setL(l){
+  L=l;
+  document.getElementById('lbfr').classList.toggle('on',l==='fr');
+  document.getElementById('lben').classList.toggle('on',l==='en');
+  document.querySelectorAll('[data-'+l+']').forEach(el=>{
+    if(!['INPUT','SELECT','TEXTAREA'].includes(el.tagName))
+      el.innerHTML=el.getAttribute('data-'+l);
+  });
+}
+
+function ui(n){
+  for(let i=1;i<=4;i++){
+    const s=document.getElementById('si'+i);
+    s.classList.remove('on','done');
+    if(i<n)s.classList.add('done');
+    else if(i===n)s.classList.add('on');
+  }
+  document.getElementById('prog').style.width=(n/4*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+  step=n;
+}
+function show(n){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+  ui(n);
+}
+function clr(){document.querySelectorAll('.f').forEach(f=>f.classList.remove('bad'));}
+function bad(id){const e=document.getElementById(id);if(e)e.classList.add('bad');}
+function g(id){return(document.getElementById(id)?.value||'').trim();}
+function rad(n){return document.querySelector('input[name="'+n+'"]:checked')?.value||'—';}
+function chk(n){return[...document.querySelectorAll('input[name="'+n+'"]:checked')].map(e=>e.value).join(', ')||'—';}
+
+function vld(n){
+  clr();let ok=true;
+  if(n===1){
+    if(!g('nom')){bad('fn');ok=false;}
+    let t=g('tg');if(!t){bad('ftg');ok=false;}
+    if(!g('pays')){bad('fpays');ok=false;}
+    if(!g('src')){bad('fsrc');ok=false;}
+    if(!document.querySelector('input[name="lng"]:checked')){bad('flng');ok=false;}
+    if(t&&!t.startsWith('@'))document.getElementById('tg').value='@'+t;
+  }
+  if(n===2){if(!document.querySelector('input[name="niv"]:checked')){bad('fniv');ok=false;}}
+  if(n===3){
+    if(!document.querySelector('input[name="exq"]:checked')){bad('fexq');ok=false;}
+    const q=document.querySelector('input[name="exq"]:checked')?.value;
+    if(q==='Oui'||q==='En cours'){
+      if(!g('exid')){bad('fexid');ok=false;}
+      if(!document.querySelector('input[name="ib"]:checked')){bad('fib');ok=false;}
+    }
+  }
+  if(n===4){if(!document.getElementById('acc').checked){bad('facc');ok=false;}}
+  return ok;
+}
+
+function nx(n){
+  if(!vld(n))return;
+  if(n===3)buildRecap();
+  show(n+1);
+}
+function pv(n){show(n-1);}
+
+function togEx(){
+  const v=document.querySelector('input[name="exq"]:checked')?.value;
+  document.getElementById('ex-yes').style.display=(v==='Oui'||v==='En cours')?'block':'none';
+  document.getElementById('ex-no').style.display=(v==='Non')?'block':'none';
+}
+
+function buildRecap(){
+  const rows=[
+    [L==='fr'?'Nom':'Name',g('nom')],
+    ['Telegram',g('tg')],
+    [L==='fr'?'Pays':'Country',g('pays')+(g('ville')?', '+g('ville'):'')],
+    [L==='fr'?'Langue':'Language',rad('lng')],
+    [L==='fr'?'Niveau':'Level',rad('niv')],
+    ['Exness',rad('exq')],
+    ['ID Exness',g('exid')||'—'],
+    [L==='fr'?'Via lien IB':'Via IB link',rad('ib')],
+    ['Sessions',chk('ses')],
+  ];
+  document.getElementById('rrows').innerHTML=rows.map(([l,v])=>
+    `<div class="rrow"><span class="rl">${l}</span><span class="rv">${v||'—'}</span></div>`
+  ).join('');
+}
+
+function doSubmit(){
+  if(!vld(4))return;
+  const d={
+    horodatage:new Date().toISOString(),
+    nom:g('nom'),telegram:g('tg'),telephone:g('tel')||'—',email:g('email')||'—',
+    pays:g('pays'),ville:g('ville')||'—',langue:rad('lng'),source:g('src'),
+    niveau:rad('niv'),experience:g('exp')||'—',capital:g('cap')||'—',
+    plateformes:chk('plat'),notions:chk('not'),objectifs:g('obj')||'—',
+    exness_compte:rad('exq'),exness_id:g('exid')||'—',exness_type:g('extype')||'—',
+    via_ib:rad('ib'),depot:rad('dep'),aide_exness:rad('aide'),
+    sessions:chk('ses'),questions:g('ques')||'—',
+  };
+
+  // ══════════════════════════════════════════════════════
+  // GOOGLE FORMS — Remplace l'URL et les entry IDs
+  // Étapes :
+  //  1. Crée ton Google Form sur forms.google.com
+  //  2. Clique "Aperçu" → inspecte chaque champ → note les "entry.XXXXXXX"
+  //  3. Remplace GOOGLE_FORM_URL et tous les entry.XXXXXXXXX ci-dessous
+  // ══════════════════════════════════════════════════════
+  const FORM_URL = 'COLLE_ICI_TON_URL_GOOGLE_FORM_ACTION';
+
+  const fd = new FormData();
+  fd.append('entry.1111111111', d.horodatage);
+  fd.append('entry.1111111112', d.nom);
+  fd.append('entry.1111111113', d.telegram);
+  fd.append('entry.1111111114', d.telephone);
+  fd.append('entry.1111111115', d.email);
+  fd.append('entry.1111111116', d.pays + (d.ville!=='—'?', '+d.ville:''));
+  fd.append('entry.1111111117', d.langue);
+  fd.append('entry.1111111118', d.source);
+  fd.append('entry.1111111119', d.niveau);
+  fd.append('entry.1111111120', d.experience);
+  fd.append('entry.1111111121', d.capital);
+  fd.append('entry.1111111122', d.plateformes);
+  fd.append('entry.1111111123', d.notions);
+  fd.append('entry.1111111124', d.objectifs);
+  fd.append('entry.1111111125', d.exness_compte);
+  fd.append('entry.1111111126', d.exness_id);
+  fd.append('entry.1111111127', d.exness_type);
+  fd.append('entry.1111111128', d.via_ib);
+  fd.append('entry.1111111129', d.depot);
+  fd.append('entry.1111111130', d.sessions);
+  fd.append('entry.1111111131', d.questions);
+
+  // Backup local
+  try{const a=JSON.parse(localStorage.getItem('lmfx')||'[]');a.push(d);localStorage.setItem('lmfx',JSON.stringify(a));}catch(e){}
+
+  const ov=document.getElementById('ov');
+  document.getElementById('ov-msg').textContent=L==='fr'?'Envoi en cours…':'Sending…';
+  ov.classList.add('show');
+
+  const send = FORM_URL!=='COLLE_ICI_TON_URL_GOOGLE_FORM_ACTION'
+    ? fetch(FORM_URL,{method:'POST',mode:'no-cors',body:fd}).catch(()=>{})
+    : Promise.resolve();
+
+  send.finally(()=>setTimeout(()=>{
+    ov.classList.remove('show');
+    document.getElementById('form-wrap').style.display='none';
+    document.getElementById('win').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  },800));
+}
+
+// Auto-@ Telegram
+document.addEventListener('DOMContentLoaded',()=>{
+  const t=document.getElementById('tg');
+  if(t)t.addEventListener('blur',()=>{if(t.value&&!t.value.startsWith('@'))t.value='@'+t.value;});
+});
+</script>
+</body>
+</html>
